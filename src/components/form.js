@@ -21,10 +21,12 @@ export default function Form({ area, id }) {
     try {
       if (area) {
         await axios.post(`http://localhost:5000/process/${id}`, { name });
+        setName("");
       } else {
         await axios.post("http://localhost:5000/area", { name });
         setRefresh(!refresh);
         getAreas();
+        setName("");
       }
     } catch (err) {
       console.log(err);

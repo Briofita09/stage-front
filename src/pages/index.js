@@ -9,7 +9,7 @@ export default function Home({ areas }) {
   const { setAreas } = useContext(AreasContext);
   useEffect(() => {
     setAreas(areas);
-  }, []);
+  }, [areas, setAreas]);
   return (
     <main className="flex min-h-screen justify-around bg-gradient-to-b from-blue-600 to-blue-950 ">
       <SideBar data={areas} />

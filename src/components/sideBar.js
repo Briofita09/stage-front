@@ -11,10 +11,11 @@ export default function SideBar({ data }) {
         <GiHamburgerMenu color="#fff" size={32} />
       </div>
       <Menu
-        className="burger-menu"
+        className="burger-menu overflow-y-scroll"
         isOpen={isOpen}
         selectedKey={"entry"}
         side="left"
+        noOverlay="true"
         onClose={() => setIsOpen(false)}>
         <Link href="/">
           <Item key={"home"} itemKey={"home"} text={"Home"} />
