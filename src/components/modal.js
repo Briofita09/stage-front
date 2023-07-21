@@ -2,20 +2,29 @@ import { AreasContext } from "@/context/areaContext";
 import axios from "axios";
 import { useContext, useState } from "react";
 
-export default function Modal({ id, setShowModal }) {
+export default function Modal({ id, setShowModal, area, setRefresh, refresh }) {
   const [name, setName] = useState("");
-  const { areas, setAreas } = useContext(AreasContext);
-
+  const { setAreas } = useContext(AreasContext);
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:5000/area/${id}`, { name });
-      setAreas((prevAreas) =>
-        prevAreas.map((area) =>
-          area.id === id ? { ...area, name: name } : area
-        )
-      );
-      setShowModal(false);
+      if (area === "area") {
+        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/area/${id}`, {
+          name,
+        });
+        setAreas((prevAreas) =>
+          prevAreas.map((area) =>
+            area.id === id ? { ...area, name: name } : area
+          )
+        );
+        setShowModal(false);
+      } else if (area === "process") {
+        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/process/${id}`, {
+          name,
+        });
+        setShowModal(false);
+        setRefresh((refresh) => !refresh);
+      }
     } catch (err) {
       console.log(err);
     }

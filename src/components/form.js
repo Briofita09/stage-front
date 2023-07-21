@@ -2,14 +2,14 @@ import { AreasContext } from "@/context/areaContext";
 import axios from "axios";
 import { useContext, useState } from "react";
 
-export default function Form({ area, id }) {
+export default function Form({ area, id, refresh, setRefresh }) {
   const [name, setName] = useState("");
-  const [refresh, setRefresh] = useState(false);
+
   const { setAreas } = useContext(AreasContext);
 
   async function getAreas() {
     try {
-      const res = await axios.get("http://localhost:5000/area");
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/area`);
       setAreas(res.data);
     } catch (err) {
       console.log(err);
@@ -20,10 +20,13 @@ export default function Form({ area, id }) {
     e.preventDefault();
     try {
       if (area) {
-        await axios.post(`http://localhost:5000/process/${id}`, { name });
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/process/${id}`, {
+          name,
+        });
+        setRefresh(!refresh);
         setName("");
       } else {
-        await axios.post("http://localhost:5000/area", { name });
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/area`, { name });
         setRefresh(!refresh);
         getAreas();
         setName("");

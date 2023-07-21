@@ -24,7 +24,7 @@ export default function Home({ areas }) {
 }
 
 export async function getStaticProps() {
-  const res = await axios.get("http://localhost:5000/area");
+  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/area`);
   const areas = res.data;
   return {
     props: {

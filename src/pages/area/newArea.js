@@ -8,15 +8,17 @@ import { HiOutlinePencilAlt } from "react-icons/hi";
 import Link from "next/link";
 import axios from "axios";
 import Modal from "@/components/modal";
+import Card from "@/components/card";
 
 export default function NewAreaPage() {
+  const [refresh, setRefresh] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [areaId, setAreaId] = useState(null);
   const { areas, setAreas } = useContext(AreasContext);
 
   async function handleDelete(id) {
     try {
-      await axios.delete(`http://localhost:5000/area/${id}`);
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/area/${id}`);
       setAreas((prevAreas) => prevAreas.filter((area) => area.id !== id));
     } catch (err) {
       console.log(err);
@@ -27,7 +29,7 @@ export default function NewAreaPage() {
       <header className="flex justify-around">
         <SideBar data={areas} />
         <div className="mt-12">
-          <Form />
+          <Form refresh={refresh} setRefresh={setRefresh} />
         </div>
         <h1></h1>
       </header>
@@ -36,12 +38,22 @@ export default function NewAreaPage() {
           Aqui estão as áreas já cadastradas. Clique em alguma para ver os
           processos
         </h1>
-        {showModal && <Modal id={areaId} setShowModal={setShowModal} />}
+        {showModal && (
+          <Modal id={areaId} setShowModal={setShowModal} area="area" />
+        )}
         <div className="flex ml-52 mr-52 gap-4 mt-10 justify-center flex-wrap">
           {areas.map((area) => {
             return (
               <>
-                <div className="border rounded-md w-32 h-36">
+                <Card
+                  key={area.id}
+                  process="area"
+                  handleDelete={handleDelete}
+                  el={area}
+                  setAreaId={setAreaId}
+                  setShowModal={setShowModal}
+                />
+                {/* <div className="border rounded-md w-32 h-36">
                   <Link
                     key={area.id}
                     href={{ pathname: "/area/[id]", query: { id: area.id } }}>
@@ -67,7 +79,7 @@ export default function NewAreaPage() {
                       }}
                     />
                   </div>
-                </div>
+                </div> */}
               </>
             );
           })}
