@@ -9,9 +9,11 @@ import ReactFlow, {
 } from "reactflow";
 import axios from "axios";
 import "reactflow/dist/style.css";
-import { HiOutlinePencilAlt } from "react-icons/hi";
+
 import SideBar from "@/components/sideBar";
+import NodeCard from "@/components/nodeCard";
 import { AreasContext } from "@/context/areaContext";
+import { useRouter } from "next/router";
 
 export default function FlowTeste() {
   const initialNodes = [
@@ -22,15 +24,31 @@ export default function FlowTeste() {
   const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
   const [startNodes, setStartNodes] = useState();
   const [startEdges, setStartEdges] = useState();
+  const [newSub, setNewSub] = useState();
+  const [refresh, setRefresh] = useState(false);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   const { areas } = useContext(AreasContext);
+  const router = useRouter();
+  const mainProcessId = router.query.id;
 
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
+
+  function addNewNode() {
+    const newNode = {
+      id: crypto.randomUUID(),
+      position: { x: 0, y: 0 },
+      data: {
+        label: newSub,
+      },
+    };
+    setNodes((prevNodes) => [...prevNodes, newNode]);
+    setNewSub("");
+  }
 
   useEffect(() => {
     async function getNodes() {
@@ -38,6 +56,7 @@ export default function FlowTeste() {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/subprocess/1`
         );
+        console.log(res.data);
         const firstNodes = res.data.map((node) => {
           return {
             id: node.id.toString(),
@@ -73,18 +92,45 @@ export default function FlowTeste() {
     }
     getNodes();
     getEdges();
-  }, [setNodes]);
+  }, [setNodes, refresh]);
 
   useEffect(() => {
     onNodesChange(nodes);
     onEdgesChange(edges);
   }, []);
 
+  async function updateProcess() {
+    const correctNodes = nodes.map((node) => {
+      return {
+        id: node.id,
+        mainProcessId,
+        name: node.data.label,
+      };
+    });
+  }
+
   return (
-    <div className="w-screen h-screen bg-gradient-to-b from-blue-600 to-blue-950 flex flex-col justify-center">
+    <div className="w-screen h-screen bg-gradient-to-b from-[#6200ed] to-[#310077] flex flex-col justify-center">
       <header className="flex justify-around">
         <SideBar data={areas} />
-        <h1 className="text-white text-5xl mb-4">Crie e edite seu processo</h1>
+        <div className="flex flex-col">
+          <h1 className="text-white text-5xl mb-4">
+            Crie e edite seu processo
+          </h1>
+          <div className="flex">
+            <input
+              className="mt-4 mb-4 w-60 rounded-md"
+              value={newSub}
+              onChange={(e) => setNewSub(e.target.value)}
+              placeholder="Nome do subprocesso"
+            />
+            <button
+              className="text-white ml-4 rounded-md bg-green-500 h-fit"
+              onClick={addNewNode}>
+              Adicionar
+            </button>
+          </div>
+        </div>
         <h1></h1>
       </header>
       <main className="flex justify-around gap-10">
@@ -100,7 +146,7 @@ export default function FlowTeste() {
               gap={20}
               size={1}
               color="#fff"
-              className="bg-amber-100"
+              className="bg-slate-200"
             />
             <Controls />
           </ReactFlow>
@@ -109,12 +155,14 @@ export default function FlowTeste() {
           <form className="flex flex-col items-center gap-4 pt-5">
             {nodes.map((node) => {
               return (
-                <div
+                <NodeCard
                   key={node.id}
-                  className="border border-white rounded-md flex justify-around w-11/12">
-                  <h1>{node.data.label}</h1>
-                  <HiOutlinePencilAlt />
-                </div>
+                  node={node}
+                  name={node.data.label}
+                  mainProcessId={mainProcessId}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                />
               );
             })}
           </form>

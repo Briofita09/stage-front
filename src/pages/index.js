@@ -11,7 +11,7 @@ export default function Home({ areas }) {
     setAreas(areas);
   }, [areas, setAreas]);
   return (
-    <main className="flex min-h-screen justify-around bg-gradient-to-b from-blue-600 to-blue-950 ">
+    <main className="flex min-h-screen justify-around bg-gradient-to-b from-[#6200ed] to-[#310077]">
       <SideBar data={areas} />
       <div className="p-12 self-center text-6xl text-center text-white">
         <h1>Bem vindo a Stage Processes!</h1>

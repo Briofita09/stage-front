@@ -53,33 +53,6 @@ export default function NewAreaPage() {
                   setAreaId={setAreaId}
                   setShowModal={setShowModal}
                 />
-                {/* <div className="border rounded-md w-32 h-36">
-                  <Link
-                    key={area.id}
-                    href={{ pathname: "/area/[id]", query: { id: area.id } }}>
-                    <div className="flex flex-col justify-around items-center w-30 h-32">
-                      <p className="text-white text-center">{area.name}</p>
-                      <GoWorkflow size={64} />
-                    </div>
-                  </Link>
-                  <div className="flex justify-between h-12 w-32 pl-1 pr-1">
-                    <HiOutlinePencilAlt
-                      color="yellow"
-                      onClick={() => {
-                        setShowModal(true);
-                        setAreaId(area.id);
-                      }}
-                    />
-                    <BsFillTrashFill
-                      className="pb-1"
-                      color="orange"
-                      size={18}
-                      onClick={() => {
-                        handleDelete(area.id);
-                      }}
-                    />
-                  </div>
-                </div> */}
               </>
             );
           })}
