@@ -13,8 +13,10 @@ import SideBar from "@/components/sideBar";
 import NodeCard from "@/components/nodeCard";
 import { AreasContext } from "@/context/areaContext";
 import { useRouter } from "next/router";
+import LinkCard from "@/components/linkCard";
 
-export default function FlowTeste() {
+export default function Flow() {
+  const [links, setLinks] = useState([]);
   const [newSub, setNewSub] = useState();
   const [refresh, setRefresh] = useState(false);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -66,7 +68,6 @@ export default function FlowTeste() {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/edge/${mainProcessId}`
         );
-        console.log(res.data);
         const firstEdges = res.data.map((edge) => {
           return {
             id: edge.id.toString(),
@@ -87,6 +88,20 @@ export default function FlowTeste() {
     onNodesChange(nodes);
     onEdgesChange(edges);
   }, []);
+
+  useEffect(() => {
+    async function getLinks() {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/link/${mainProcessId}`
+        );
+        setLinks(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getLinks();
+  }, [mainProcessId]);
 
   async function updateProcess() {
     const correctNodes = nodes.map((node) => {
@@ -123,7 +138,6 @@ export default function FlowTeste() {
       edgesBody
     );
   }
-  console.log(nodes);
   return (
     <div className="w-screen h-screen bg-gradient-to-b from-[#6200ed] to-[#310077] flex flex-col justify-center">
       <header className="flex justify-around">
@@ -153,7 +167,17 @@ export default function FlowTeste() {
         </button>
       </header>
       <main className="flex justify-around gap-10">
-        <div className="w-1/4"></div>
+        <div className="h-[800px] w-1/4 border rounded-md">
+          {links.map((link) => {
+            return (
+              <div
+                key={link.id}
+                className="flex h-fit w-full items-center flex-col mt-2">
+                <LinkCard link={link} />
+              </div>
+            );
+          })}
+        </div>
         <div className="w-1/2 h-[800px] border border-white rounded-md">
           <ReactFlow
             nodes={nodes}
