@@ -54,13 +54,12 @@ export default function FlowTeste() {
     async function getNodes() {
       try {
         const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/subprocess/1`
+          `${process.env.NEXT_PUBLIC_API_URL}/subprocess/${mainProcessId}`
         );
-        console.log(res.data);
         const firstNodes = res.data.map((node) => {
           return {
             id: node.id.toString(),
-            position: { x: 400, y: node.order * 100 },
+            position: { x: node.xCoord, y: node.yCoord },
             data: {
               label: node.name,
             },
@@ -77,6 +76,7 @@ export default function FlowTeste() {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/edge/1`
         );
+        console.log(res.data);
         const firstEdges = res.data.map((edge) => {
           return {
             id: edge.id.toString(),
@@ -105,10 +105,36 @@ export default function FlowTeste() {
         id: node.id,
         mainProcessId,
         name: node.data.label,
+        xCoord: node.position.x,
+        yCoord: node.position.y,
       };
     });
+    const nodesBody = { subprocess: correctNodes };
+    const correctEdges = edges.map((edge) => {
+      return {
+        id: edge.id,
+        processId: mainProcessId,
+        target: edge.target,
+        source: edge.source,
+      };
+    });
+    const edgesBody = { edges: correctEdges };
+    await axios.delete(
+      `${process.env.NEXT_PUBLIC_API_URL}/edge/${mainProcessId}`
+    );
+    await axios.delete(
+      `${process.env.NEXT_PUBLIC_API_URL}/subprocess/${mainProcessId}`
+    );
+    await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/subprocess/${mainProcessId}`,
+      nodesBody
+    );
+    await axios.post(
+      `${process.env.NEXT_PUBLIC_API_URL}/edge/${mainProcessId}`,
+      edgesBody
+    );
   }
-
+  console.log(nodes);
   return (
     <div className="w-screen h-screen bg-gradient-to-b from-[#6200ed] to-[#310077] flex flex-col justify-center">
       <header className="flex justify-around">
@@ -131,7 +157,11 @@ export default function FlowTeste() {
             </button>
           </div>
         </div>
-        <h1></h1>
+        <button
+          className="h-fit bg-green-500 rounded-md"
+          onClick={() => updateProcess()}>
+          Salvar
+        </button>
       </header>
       <main className="flex justify-around gap-10">
         <div className="w-1/4"></div>
