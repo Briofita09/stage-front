@@ -5,7 +5,6 @@ import ReactFlow, {
   addEdge,
   Background,
   Controls,
-  MiniMap,
 } from "reactflow";
 import axios from "axios";
 import "reactflow/dist/style.css";
@@ -16,18 +15,10 @@ import { AreasContext } from "@/context/areaContext";
 import { useRouter } from "next/router";
 
 export default function FlowTeste() {
-  const initialNodes = [
-    { id: "1", position: { x: 0, y: 0 }, data: { label: "1" } },
-    { id: "2", position: { x: 200, y: 0 }, data: { label: "2" } },
-    { id: "3", position: { x: 400, y: 0 }, data: { label: "3" } },
-  ];
-  const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
-  const [startNodes, setStartNodes] = useState();
-  const [startEdges, setStartEdges] = useState();
   const [newSub, setNewSub] = useState();
   const [refresh, setRefresh] = useState(false);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   const { areas } = useContext(AreasContext);
   const router = useRouter();
@@ -66,7 +57,6 @@ export default function FlowTeste() {
           };
         });
         setNodes([...firstNodes]);
-        setStartNodes(firstNodes);
       } catch (err) {
         console.log(err);
       }
@@ -74,7 +64,7 @@ export default function FlowTeste() {
     async function getEdges() {
       try {
         const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/edge/1`
+          `${process.env.NEXT_PUBLIC_API_URL}/edge/${mainProcessId}`
         );
         console.log(res.data);
         const firstEdges = res.data.map((edge) => {
@@ -85,7 +75,6 @@ export default function FlowTeste() {
           };
         });
         setEdges([...firstEdges]);
-        setStartEdges(firstEdges);
       } catch (err) {
         console.log(err);
       }
