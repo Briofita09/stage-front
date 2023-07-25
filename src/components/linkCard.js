@@ -5,6 +5,8 @@ import {
   BsFillTrashFill,
   BsCheckSquare,
 } from "react-icons/bs";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function LinkCard({ link, refresh, setRefresh }) {
   const [showModal, setShowModal] = useState(false);
@@ -51,26 +53,65 @@ export default function LinkCard({ link, refresh, setRefresh }) {
         title,
         link: newLink,
       });
+      toast.error("Link modificado com sucesso!", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       setRefresh(!refresh);
       setShowModal(false);
     } catch (err) {
-      console.log(err);
+      toast.error(err.message, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   }
 
   async function handleDelete(id) {
     try {
       await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/link/${id}`);
+      toast.success("Link deletado com sucesso!", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       setRefresh(!refresh);
       setShowModal(false);
     } catch (err) {
-      console.log(err);
+      toast.error(err.message, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   }
 
   return (
     <>
-      <div className="flex h-fit w-9/12 border rounded-md justify-around items-center">
+      <div className="flex h-fit w-9/12 border rounded-md justify-between items-center">
+        <ToastContainer />
         <div className="flex gap-0">
           <BsThreeDotsVertical
             className="mr-[-10px]"

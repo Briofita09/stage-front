@@ -1,6 +1,8 @@
 import { AreasContext } from "@/context/areaContext";
 import axios from "axios";
 import { useContext, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Modal({ id, setShowModal, area, setRefresh, refresh }) {
   const [name, setName] = useState("");
@@ -17,16 +19,45 @@ export default function Modal({ id, setShowModal, area, setRefresh, refresh }) {
             area.id === id ? { ...area, name: name } : area
           )
         );
+        toast.success("Área atualizada com sucesso", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
         setShowModal(false);
       } else if (area === "process") {
         await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/process/${id}`, {
           name,
         });
+        toast.success("Processo atualizado com sucesso!", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
         setShowModal(false);
         setRefresh((refresh) => !refresh);
       }
     } catch (err) {
-      console.log(err);
+      toast.error(err.message, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   }
 

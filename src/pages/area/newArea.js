@@ -5,6 +5,8 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "@/components/modal";
 import Card from "@/components/card";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function NewAreaPage() {
   const [refresh, setRefresh] = useState(false);
@@ -15,9 +17,55 @@ export default function NewAreaPage() {
   async function handleDelete(id) {
     try {
       await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/area/${id}`);
+      toast.success("Área deletada com sucesso", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       setAreas((prevAreas) => prevAreas.filter((area) => area.id !== id));
     } catch (err) {
-      console.log(err);
+      toast.error(err.message, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  }
+
+  function renderToast(result) {
+    if (result === "success") {
+      toast.success("Nova area adicionada com sucesso!", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+    if (result === "error") {
+      toast.error("Falha na requisição!", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   }
 
@@ -26,9 +74,15 @@ export default function NewAreaPage() {
       <header className="flex justify-around">
         <SideBar />
         <div className="mt-12">
-          <Form refresh={refresh} setRefresh={setRefresh} />
+          <Form
+            refresh={refresh}
+            setRefresh={setRefresh}
+            renderToast={renderToast}
+          />
         </div>
-        <h1></h1>
+        <h1>
+          <ToastContainer />
+        </h1>
       </header>
       <main>
         <h1 className="text-center text-white mt-12 text-xl">

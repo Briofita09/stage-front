@@ -2,7 +2,7 @@ import { AreasContext } from "@/context/areaContext";
 import axios from "axios";
 import { useContext, useState } from "react";
 
-export default function Form({ area, id, refresh, setRefresh }) {
+export default function Form({ area, id, refresh, setRefresh, renderToast }) {
   const [name, setName] = useState("");
 
   const { setAreas } = useContext(AreasContext);
@@ -23,16 +23,19 @@ export default function Form({ area, id, refresh, setRefresh }) {
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/process/${id}`, {
           name,
         });
+        renderToast("success");
         setRefresh(!refresh);
         setName("");
       } else {
         await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/area`, { name });
+        renderToast("success");
         setRefresh(!refresh);
         getAreas();
         setName("");
       }
     } catch (err) {
       console.log(err);
+      renderToast("error");
     }
   }
 

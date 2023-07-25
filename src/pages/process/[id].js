@@ -7,6 +7,8 @@ import ReactFlow, {
   Controls,
 } from "reactflow";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "reactflow/dist/style.css";
 
 import SideBar from "@/components/sideBar";
@@ -15,6 +17,8 @@ import { useRouter } from "next/router";
 import LinkCard from "@/components/linkCard";
 
 export default function Flow() {
+  const [newLinkTitle, setNewLinkTitle] = useState("");
+  const [newLink, setNewLink] = useState("");
   const [links, setLinks] = useState([]);
   const [newSub, setNewSub] = useState();
   const [refresh, setRefresh] = useState(false);
@@ -57,7 +61,16 @@ export default function Flow() {
         });
         setNodes([...firstNodes]);
       } catch (err) {
-        console.log(err);
+        toast.error(err.message, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       }
     }
     async function getEdges() {
@@ -74,7 +87,16 @@ export default function Flow() {
         });
         setEdges([...firstEdges]);
       } catch (err) {
-        console.log(err);
+        toast.error(err.message, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       }
     }
     getNodes();
@@ -94,49 +116,107 @@ export default function Flow() {
         );
         setLinks(res.data);
       } catch (err) {
-        console.log(err);
+        toast.error(err.message, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       }
     }
     getLinks();
   }, [refresh]);
 
   async function updateProcess() {
-    const correctNodes = nodes.map((node) => {
-      return {
-        id: node.id,
-        mainProcessId,
-        name: node.data.label,
-        xCoord: node.position.x,
-        yCoord: node.position.y,
-      };
-    });
-    const nodesBody = { subprocess: correctNodes };
-    const correctEdges = edges.map((edge) => {
-      return {
-        id: edge.id,
-        processId: mainProcessId,
-        target: edge.target,
-        source: edge.source,
-      };
-    });
-    const edgesBody = { edges: correctEdges };
-    await axios.delete(
-      `${process.env.NEXT_PUBLIC_API_URL}/edge/${mainProcessId}`
-    );
-    await axios.delete(
-      `${process.env.NEXT_PUBLIC_API_URL}/subprocess/${mainProcessId}`
-    );
-    await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/subprocess/${mainProcessId}`,
-      nodesBody
-    );
-    await axios.post(
-      `${process.env.NEXT_PUBLIC_API_URL}/edge/${mainProcessId}`,
-      edgesBody
-    );
+    try {
+      const correctNodes = nodes.map((node) => {
+        return {
+          id: node.id,
+          mainProcessId,
+          name: node.data.label,
+          xCoord: node.position.x,
+          yCoord: node.position.y,
+        };
+      });
+      const nodesBody = { subprocess: correctNodes };
+      const correctEdges = edges.map((edge) => {
+        return {
+          id: edge.id,
+          processId: mainProcessId,
+          target: edge.target,
+          source: edge.source,
+        };
+      });
+      const edgesBody = { edges: correctEdges };
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/edge/${mainProcessId}`
+      );
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/subprocess/${mainProcessId}`
+      );
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/subprocess/${mainProcessId}`,
+        nodesBody
+      );
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/edge/${mainProcessId}`,
+        edgesBody
+      );
+      toast.success("Etapas salvas com sucesso!", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    } catch (err) {
+      toast.error(err.message, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
   }
+
+  async function handleSubmitLink() {
+    try {
+      const body = { link: newLink, title: newLinkTitle };
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/link/${mainProcessId}`,
+        body
+      );
+      setRefresh(!refresh);
+      setNewLink("");
+      setNewLinkTitle("");
+    } catch (err) {
+      toast.error(err.message, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  }
+
   return (
     <div className="w-screen h-screen bg-gradient-to-b from-[#6200ed] to-[#310077] flex flex-col justify-center">
+      <ToastContainer />
       <header className="flex justify-around">
         <SideBar />
         <div className="flex flex-col">
@@ -166,6 +246,24 @@ export default function Flow() {
       </header>
       <main className="flex justify-around gap-10">
         <div className="h-[800px] w-1/4 border rounded-md">
+          <div className="flex gap-2 justify-around mt-2">
+            <input
+              className="1/3 rounded-md text-center"
+              placeholder="Link"
+              onChange={(e) => setNewLink(e.target.value)}
+            />
+            <input
+              className="1/3 rounded-md text-center"
+              placeholder="Titulo"
+              value={newLinkTitle}
+              onChange={(e) => setNewLinkTitle(e.target.value)}
+            />
+            <button
+              className="border rounded-md bg-green-500 text-white"
+              onClick={handleSubmitLink}>
+              Salvar
+            </button>
+          </div>
           {links.map((link) => {
             return (
               <div

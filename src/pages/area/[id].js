@@ -6,6 +6,8 @@ import { useEffect, useState, useContext } from "react";
 import { AreasContext } from "@/context/areaContext";
 import Modal from "@/components/modal";
 import Card from "@/components/card";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function AreaPage() {
   const [areaName, setAreaName] = useState("");
@@ -22,9 +24,55 @@ export default function AreaPage() {
   async function handleDelete(id) {
     try {
       await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/process/${id}`);
+      toast.success("Processo deletado com sucesso!", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
       setRefresh(!refresh);
     } catch (err) {
-      console.log(err);
+      toast.error(err.message, {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+  }
+
+  function renderToast(result) {
+    if (result === "success") {
+      toast.success("Novo processo adicionado com sucesso!", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+    }
+    if (result === "error") {
+      toast.error("Falha na requisição!", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
     }
   }
 
@@ -36,7 +84,16 @@ export default function AreaPage() {
         );
         setAreaName(res.data.name);
       } catch (err) {
-        console.log(err);
+        toast.error(err.message, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       }
     }
     async function getProcesses() {
@@ -46,7 +103,16 @@ export default function AreaPage() {
         );
         setProcesses(res.data);
       } catch (err) {
-        console.log(err);
+        toast.error(err.message, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       }
     }
     getAreaName();
@@ -67,10 +133,13 @@ export default function AreaPage() {
               id={id}
               refresh={refresh}
               setRefresh={setRefresh}
+              renderToast={renderToast}
             />
           </div>
         </div>
-        <h1></h1>
+        <h1>
+          <ToastContainer />
+        </h1>
       </header>
       <main>
         <h1 className="text-white mt-12 text-center">

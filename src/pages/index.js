@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import SideBar from "@/components/sideBar";
 import { AreasContext } from "@/context/areaContext";
@@ -15,7 +17,16 @@ export default function Home() {
         setAllAreas(allAreas);
         setAreas(areas);
       } catch (err) {
-        console.log(err);
+        toast.error(err.message, {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+        });
       }
     }
     getAreas();
@@ -28,7 +39,9 @@ export default function Home() {
         <h1>A aplicação para acompanhar os processos da sua empresa</h1>
       </div>
 
-      <h1></h1>
+      <h1>
+        <ToastContainer />
+      </h1>
     </main>
   );
 }
