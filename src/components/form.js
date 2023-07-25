@@ -34,7 +34,6 @@ export default function Form({ area, id, refresh, setRefresh, renderToast }) {
         setName("");
       }
     } catch (err) {
-      console.log(err);
       renderToast("error");
     }
   }

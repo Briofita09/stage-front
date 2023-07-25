@@ -189,11 +189,9 @@ export default function Flow() {
       });
     }
   }
-  console.log(newLink);
   async function handleSubmitLink() {
     try {
       const body = { link: newLink, title: newLinkTitle };
-      console.log(body);
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/link/${mainProcessId}`,
         body
