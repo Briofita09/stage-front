@@ -247,13 +247,13 @@ export default function Flow() {
         <div className="h-[800px] w-1/4 border rounded-md">
           <div className="flex gap-2 justify-around mt-2">
             <input
-              className="1/3 rounded-md text-center"
+              className="w-1/3 rounded-md text-center"
               value={newLink}
               placeholder="Link"
               onChange={(e) => setNewLink(e.target.value)}
             />
             <input
-              className="1/3 rounded-md text-center"
+              className="w-1/3 rounded-md text-center"
               placeholder="Titulo"
               value={newLinkTitle}
               onChange={(e) => setNewLinkTitle(e.target.value)}
