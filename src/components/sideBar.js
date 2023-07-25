@@ -1,9 +1,11 @@
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Menu, Item } from "burger-menu";
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AreasContext } from "@/context/areaContext";
 
 export default function SideBar({ data }) {
+  const { areas } = useContext(AreasContext);
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
@@ -27,7 +29,7 @@ export default function SideBar({ data }) {
             text={"Adicionar nova area"}
           />
         </Link>
-        {data.map((el) => {
+        {areas.map((el) => {
           return (
             <Link
               key={el.id}
