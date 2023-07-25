@@ -82,12 +82,12 @@ export default function Flow() {
     }
     getNodes();
     getEdges();
-  }, [setNodes, refresh]);
+  }, [setNodes, refresh, mainProcessId, setEdges]);
 
   useEffect(() => {
     onNodesChange(nodes);
     onEdgesChange(edges);
-  }, []);
+  }, [edges, nodes, onEdgesChange, onNodesChange]);
 
   useEffect(() => {
     async function getLinks() {
