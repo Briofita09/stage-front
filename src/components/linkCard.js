@@ -39,7 +39,7 @@ export default function LinkCard({ link, refresh, setRefresh }) {
           <input
             className="border-2 border-black rounded-md mb-2 w-11/12"
             placeholder="link"
-            value={link.link}
+            value={newLink}
             onChange={(e) => setNewLink(e.target.value)}
           />
         </div>
