@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import "burger-menu/lib/index.css";
 import axios from "axios";
 
 import SideBar from "@/components/sideBar";

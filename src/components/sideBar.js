@@ -3,8 +3,9 @@ import { Menu, Item } from "burger-menu";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import { AreasContext } from "@/context/areaContext";
+import "burger-menu/lib/index.css";
 
-export default function SideBar({ data }) {
+export default function SideBar() {
   const { areas } = useContext(AreasContext);
   const [isOpen, setIsOpen] = useState(false);
   return (
