@@ -15,7 +15,6 @@ export default function SideBar({ data }) {
       <Menu
         className="burger-menu overflow-y-scroll"
         isOpen={isOpen}
-        selectedKey={"entry"}
         side="left"
         noOverlay="true"
         onClose={() => setIsOpen(false)}>

@@ -1,11 +1,7 @@
 import Form from "@/components/form";
 import SideBar from "@/components/sideBar";
 import { AreasContext } from "@/context/areaContext";
-import { useContext, useState } from "react";
-import { GoWorkflow } from "react-icons/go";
-import { BsFillTrashFill } from "react-icons/bs";
-import { HiOutlinePencilAlt } from "react-icons/hi";
-import Link from "next/link";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "@/components/modal";
 import Card from "@/components/card";
@@ -24,10 +20,24 @@ export default function NewAreaPage() {
       console.log(err);
     }
   }
+
+  useEffect(() => {
+    async function getAreas() {
+      try {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/area`);
+        const areas = res.data;
+        setAreas(areas);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    getAreas();
+  }, [setAreas]);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-600 to-blue-950 ">
       <header className="flex justify-around">
-        <SideBar data={areas} />
+        <SideBar />
         <div className="mt-12">
           <Form refresh={refresh} setRefresh={setRefresh} />
         </div>
