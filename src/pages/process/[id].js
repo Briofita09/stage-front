@@ -11,7 +11,6 @@ import "reactflow/dist/style.css";
 
 import SideBar from "@/components/sideBar";
 import NodeCard from "@/components/nodeCard";
-import { AreasContext } from "@/context/areaContext";
 import { useRouter } from "next/router";
 import LinkCard from "@/components/linkCard";
 
@@ -21,8 +20,6 @@ export default function Flow() {
   const [refresh, setRefresh] = useState(false);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-
-  const { areas } = useContext(AreasContext);
   const router = useRouter();
   const mainProcessId = router.query.id;
 
@@ -87,7 +84,7 @@ export default function Flow() {
   useEffect(() => {
     onNodesChange(nodes);
     onEdgesChange(edges);
-  }, [edges, nodes, onEdgesChange, onNodesChange]);
+  }, []);
 
   useEffect(() => {
     async function getLinks() {
@@ -101,7 +98,7 @@ export default function Flow() {
       }
     }
     getLinks();
-  }, [mainProcessId]);
+  });
 
   async function updateProcess() {
     const correctNodes = nodes.map((node) => {
@@ -141,30 +138,31 @@ export default function Flow() {
   return (
     <div className="w-screen h-screen bg-gradient-to-b from-[#6200ed] to-[#310077] flex flex-col justify-center">
       <header className="flex justify-around">
-        <SideBar data={areas} />
+        <SideBar />
         <div className="flex flex-col">
           <h1 className="text-white text-5xl mb-4">
             Crie e edite seu processo
           </h1>
-          <div className="flex">
+          <div className="flex items-center justify-center gap-4">
+            <button
+              className="h-fit bg-green-500 rounded-md text-white p-2"
+              onClick={() => updateProcess()}>
+              Salvar etapas
+            </button>
             <input
-              className="mt-4 mb-4 w-60 rounded-md"
+              className="mt-4 mb-4 w-60 rounded-md text-center"
               value={newSub}
               onChange={(e) => setNewSub(e.target.value)}
-              placeholder="Nome do subprocesso"
+              placeholder="Nome da etapa"
             />
             <button
-              className="text-white ml-4 rounded-md bg-green-500 h-fit"
+              className="text-white rounded-md bg-green-500 h-fit p-2"
               onClick={addNewNode}>
               Adicionar
             </button>
           </div>
         </div>
-        <button
-          className="h-fit bg-green-500 rounded-md"
-          onClick={() => updateProcess()}>
-          Salvar
-        </button>
+        <div className="w-10"></div>
       </header>
       <main className="flex justify-around gap-10">
         <div className="h-[800px] w-1/4 border rounded-md">

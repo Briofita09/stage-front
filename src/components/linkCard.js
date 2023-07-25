@@ -1,11 +1,15 @@
 import axios from "axios";
 import { useState } from "react";
-import { BsThreeDots, BsFillTrashFill, BsCheckSquare } from "react-icons/bs";
+import {
+  BsThreeDotsVertical,
+  BsFillTrashFill,
+  BsCheckSquare,
+} from "react-icons/bs";
 
 export default function LinkCard({ link }) {
   const [showModal, setShowModal] = useState(false);
-  const [title, setTitle] = useState("");
-  const [newLink, setNewLink] = useState("");
+  const [title, setTitle] = useState(link.title);
+  const [newLink, setNewLink] = useState(link.link);
 
   function renderModal(id) {
     return (
@@ -23,15 +27,17 @@ export default function LinkCard({ link }) {
         </div>
         <div className="flex justify-between">
           <input
-            className="border-2 rounded-md mt-2 mb-2"
+            className="border-2 border-black rounded-md mt-2 mb-2 w-11/12"
             placeholder="título"
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
         </div>
         <div className="flex justify-between">
           <input
-            className="border-2 rounded-md mb-2"
+            className="border-2 border-black rounded-md mb-2 w-11/12"
             placeholder="link"
+            value={link.link}
             onChange={(e) => setNewLink(e.target.value)}
           />
         </div>
@@ -60,14 +66,25 @@ export default function LinkCard({ link }) {
 
   return (
     <>
-      <div className="flex h-fit w-9/12 border rounded-md justify-around">
-        <BsThreeDots color="#fff" onClick={() => setShowModal(true)} />
+      <div className="flex h-fit w-9/12 border rounded-md justify-around items-center">
+        <div className="flex gap-0">
+          <BsThreeDotsVertical
+            className="mr-[-10px]"
+            color="#fff"
+            onClick={() => setShowModal(true)}
+          />
+          <BsThreeDotsVertical
+            className="pl-0"
+            color="#fff"
+            onClick={() => setShowModal(true)}
+          />
+        </div>
         <a href={link.link} target="_blank" className="text-white">
           {link.title}
         </a>
         <div></div>
       </div>
-      <div>{showModal && renderModal(link.id)}</div>
+      <div className="w-9/12">{showModal && renderModal(link.id)}</div>
     </>
   );
 }

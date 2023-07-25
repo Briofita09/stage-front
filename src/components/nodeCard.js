@@ -33,16 +33,23 @@ export default function NodeCard({
   }
 
   return (
-    <div className="border border-white rounded-md flex justify-around w-11/12">
+    <div className="border border-white rounded-md flex justify-around items-center w-11/12 p-2">
       {selected ? (
         <>
-          <button onClick={() => setSelected(false)}>X</button>
+          <button className=" text-white" onClick={() => setSelected(false)}>
+            X
+          </button>
           <input
             type="text"
             value={nodeName}
             onChange={(e) => setNodeName(e.target.value)}
+            className="w-8/12 rounded-md"
           />
-          <button onClick={handleSubmit}>Salvar</button>
+          <button
+            className="bg-green-500 border rounded-md text-white p-2"
+            onClick={handleSubmit}>
+            Salvar
+          </button>
         </>
       ) : (
         <>

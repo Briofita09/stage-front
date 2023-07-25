@@ -30,6 +30,7 @@ export default function SideBar() {
           />
         </Link>
         {areas.map((el) => {
+          console.log(el);
           return (
             <Link
               key={el.id}

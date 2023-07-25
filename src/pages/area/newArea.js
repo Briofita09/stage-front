@@ -21,19 +21,6 @@ export default function NewAreaPage() {
     }
   }
 
-  useEffect(() => {
-    async function getAreas() {
-      try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/area`);
-        const areas = res.data;
-        setAreas(areas);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    getAreas();
-  }, [setAreas]);
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-600 to-blue-950 ">
       <header className="flex justify-around">
