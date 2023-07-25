@@ -98,7 +98,7 @@ export default function Flow() {
       }
     }
     getLinks();
-  });
+  }, [refresh]);
 
   async function updateProcess() {
     const correctNodes = nodes.map((node) => {
@@ -171,7 +171,11 @@ export default function Flow() {
               <div
                 key={link.id}
                 className="flex h-fit w-full items-center flex-col mt-2">
-                <LinkCard link={link} />
+                <LinkCard
+                  link={link}
+                  refresh={refresh}
+                  setRefresh={setRefresh}
+                />
               </div>
             );
           })}

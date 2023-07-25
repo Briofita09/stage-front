@@ -33,7 +33,7 @@ export default function NodeCard({
   }
 
   return (
-    <div className="border border-white rounded-md flex justify-around items-center w-11/12 p-2">
+    <div className="border border-white rounded-md flex justify-between items-center w-11/12 p-2">
       {selected ? (
         <>
           <button className=" text-white" onClick={() => setSelected(false)}>

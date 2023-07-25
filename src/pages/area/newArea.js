@@ -22,7 +22,7 @@ export default function NewAreaPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-600 to-blue-950 ">
+    <div className="min-h-screen bg-gradient-to-b from-[#6200ed] to-[#310077] ">
       <header className="flex justify-around">
         <SideBar />
         <div className="mt-12">
@@ -31,9 +31,9 @@ export default function NewAreaPage() {
         <h1></h1>
       </header>
       <main>
-        <h1 className="text-center text-white mt-12">
+        <h1 className="text-center text-white mt-12 text-xl">
           Aqui estão as áreas já cadastradas. Clique em alguma para ver os
-          processos
+          processos!
         </h1>
         {showModal && (
           <Modal id={areaId} setShowModal={setShowModal} area="area" />

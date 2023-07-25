@@ -53,7 +53,7 @@ export default function AreaPage() {
     getProcesses();
   }, [id, refresh]);
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-600 to-blue-950 ">
+    <div className="min-h-screen bg-gradient-to-b from-[#6200ed] to-[#310077] ">
       <header className="flex justify-around">
         <SideBar data={areas} />
         <div>

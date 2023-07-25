@@ -6,7 +6,7 @@ import {
   BsCheckSquare,
 } from "react-icons/bs";
 
-export default function LinkCard({ link }) {
+export default function LinkCard({ link, refresh, setRefresh }) {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState(link.title);
   const [newLink, setNewLink] = useState(link.link);
@@ -51,6 +51,8 @@ export default function LinkCard({ link }) {
         title,
         link: newLink,
       });
+      setRefresh(!refresh);
+      setShowModal(false);
     } catch (err) {
       console.log(err);
     }
@@ -59,6 +61,8 @@ export default function LinkCard({ link }) {
   async function handleDelete(id) {
     try {
       await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/link/${id}`);
+      setRefresh(!refresh);
+      setShowModal(false);
     } catch (err) {
       console.log(err);
     }
