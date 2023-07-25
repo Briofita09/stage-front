@@ -107,28 +107,28 @@ export default function LinkCard({ link, refresh, setRefresh }) {
       });
     }
   }
-
   return (
     <>
       <div className="flex h-fit w-9/12 border rounded-md justify-between items-center">
-        <ToastContainer />
-        <div className="flex gap-0">
+        <a
+          href={link.link}
+          target="_blank"
+          className="text-white text-center pl-5">
+          {link.title}
+        </a>
+        <div className="flex gap-0 pr-5">
           <BsThreeDotsVertical
             className="mr-[-10px]"
             color="#fff"
             onClick={() => setShowModal(true)}
           />
           <BsThreeDotsVertical
-            className="pl-0"
             color="#fff"
             onClick={() => setShowModal(true)}
           />
         </div>
-        <a href={link.link} target="_blank" className="text-white">
-          {link.title}
-        </a>
-        <div></div>
       </div>
+      <ToastContainer />
       <div className="w-9/12">{showModal && renderModal(link.id)}</div>
     </>
   );

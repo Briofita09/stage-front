@@ -189,17 +189,18 @@ export default function Flow() {
       });
     }
   }
-
+  console.log(newLink);
   async function handleSubmitLink() {
     try {
       const body = { link: newLink, title: newLinkTitle };
+      console.log(body);
       await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/link/${mainProcessId}`,
         body
       );
-      setRefresh(!refresh);
       setNewLink("");
       setNewLinkTitle("");
+      setRefresh(!refresh);
     } catch (err) {
       toast.error(err.message, {
         position: toast.POSITION.TOP_CENTER,
@@ -249,6 +250,7 @@ export default function Flow() {
           <div className="flex gap-2 justify-around mt-2">
             <input
               className="1/3 rounded-md text-center"
+              value={newLink}
               placeholder="Link"
               onChange={(e) => setNewLink(e.target.value)}
             />
